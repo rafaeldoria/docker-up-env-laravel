@@ -29,6 +29,12 @@ function main() {
     log "Pasta raiz do projeto"
     project_folder=$(realpath "../")
 
+    log "Criando pastas de logs e definindo permissões"
+    sudo mkdir -p /var/log-containers/-app/
+    sudo chown -R www-data:www-data /var/log-containers/-*
+    sudo chmod -R ugo-s,ugo=,ug=rwX,o=rX /var/log-containers/-*
+    sudo find /var/log-containers/-* -type d -exec sudo chmod g+s {} \;
+
     log "Deletando pasta vendor"
     sudo rm -rf "$project_folder/vendor"
 
@@ -36,6 +42,16 @@ function main() {
     if [[ ! -f "$project_folder/.env" ]]; then
         sudo cp "$project_folder/.env.example" "$project_folder/.env"
     fi
+
+    log "Corrigindo permissões dos arquivos"
+    sudo setfacl -Rb "$project_folder"
+    sudo mkdir -p "$project_folder/storage/{app,framework,logs}"
+    sudo mkdir -p "$project_folder/storage/framework/{sessions,views,cache/data}"
+    sudo chown -R www-data:www-data "$project_folder"
+    sudo chmod -R ugo-s,ugo=,ug=rwX "$project_folder"
+    sudo find "$project_folder" -type d -exec sudo chmod g+s {} \;
+    sudo setfacl -Rdm u:"$EUID":rwX,m:rwX "$project_folder"
+    sudo setfacl -Rm u:"$EUID":rwX,m:rwX "$project_folder"
 
     log "Adicionando exceção ao Git sobre permissões da pasta de projeto"
     git config --global --add safe.directory "$project_folder"
