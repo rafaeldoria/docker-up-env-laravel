@@ -58,7 +58,7 @@ function main() {
     log "$project_folder"
 
     log "build ambiente"
-    docker compose up -d --build
+    docker compose up -d --build --force-recreate
 
     log "Executando composer"
     docker compose exec -T app bash -c "composer install"

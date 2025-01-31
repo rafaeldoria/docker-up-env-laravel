@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install -y \
 #ARG XDEBUG_VERSION=3.2.2
 #RUN pecl install -o -f xdebug-$XDEBUG_VERSION \
 #    && docker-php-ext-enable xdebug \
-#    && echo "xdebug.client_port=9001" >> "$PHP_INI_DIR/conf.d/xdebug.ini" \
+#    && echo "xdebug.client_port=9000" >> "$PHP_INI_DIR/conf.d/xdebug.ini" \
 #    && echo "xdebug.mode=debug" >> "$PHP_INI_DIR/conf.d/xdebug.ini" \
 #    && echo "xdebug.discover_client_host=0" >> "$PHP_INI_DIR/conf.d/xdebug.ini" \
 #    && echo "xdebug.client_host=host.docker.internal" >> "$PHP_INI_DIR/conf.d/xdebug.ini" \
